@@ -1,6 +1,6 @@
 This project is a web application designed to facilitate user authentication and authorization. Users can create an account, log in securely, and access protected pages. The backend is built using Node.js, and data is stored in a MongoDB database. Security measures, such as password hashing and JWT authentication, are implemented to protect user data.
 
-## Live project: [Click Me](wanderon-five.vercel.app)
+## Live project: [Click Me](https://wanderon-five.vercel.app/signup)
 
 ## Approach
 
