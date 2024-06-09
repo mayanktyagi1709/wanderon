@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ArrowRight } from "lucide-react";
 import toast from "react-hot-toast";
+import DOMPurify from "dompurify";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -15,18 +17,61 @@ export default function SignupPage() {
     password: "",
   });
 
+  const [errors, setErrors] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const validate = () => {
+    let valid = true;
+    let errors = {
+      username: "",
+      email: "",
+      password: "",
+    };
+
+    if (user.username.trim().length < 3) {
+      errors.username = "Full Name must be at least 3 characters.";
+      valid = false;
+    }
+    if (!/\S+@\S+\.\S+/.test(user.email)) {
+      errors.email = "Email address is invalid.";
+      valid = false;
+    }
+    if (user.password.trim().length < 6) {
+      errors.password = "Password must be at least 6 characters.";
+      valid = false;
+    }
+
+    setErrors(errors);
+    return valid;
+  };
+
   const onSignUp = async () => {
-    try {
-      const response = await axios.post("/api/users/signup", user);
-      router.push("/signin");
-    } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : "An unknown error occurred";
-      toast.error(errorMessage, { duration: 3000 });
+    if (validate()) {
+      try {
+        const sanitizedUser = {
+          username: DOMPurify.sanitize(user.username),
+          email: DOMPurify.sanitize(user.email),
+          password: DOMPurify.sanitize(user.password),
+        };
+
+        const response = await axios.post("/api/users/signup", sanitizedUser);
+        router.push("/signin");
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        toast.error(errorMessage, { duration: 3000 });
+      }
+    } else {
+      toast.error("Please fix the errors in the form.", { duration: 3000 });
     }
   };
+
   return (
     <section>
+      <Toaster/>
       <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
         <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
           <h2 className="text-center text-2xl font-bold leading-tight text-black">
@@ -63,6 +108,11 @@ export default function SignupPage() {
                       setUser({ ...user, username: e.target.value })
                     }
                   ></input>
+                  {errors.username && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.username}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
@@ -84,6 +134,9 @@ export default function SignupPage() {
                       setUser({ ...user, email: e.target.value })
                     }
                   ></input>
+                  {errors.email && (
+                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                  )}
                 </div>
               </div>
               <div>
@@ -107,6 +160,11 @@ export default function SignupPage() {
                       setUser({ ...user, password: e.target.value })
                     }
                   ></input>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
               </div>
               <div>
