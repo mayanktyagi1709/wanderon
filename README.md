@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This project is a web application designed to facilitate user authentication and authorization. Users can create an account, log in securely, and access protected pages. The backend is built using Node.js, and data is stored in a MongoDB database. Security measures, such as password hashing and JWT authentication, are implemented to protect user data.
+
+## Live project: [Click Me](wanderon-git-main-mayanktyagi1709s-projects.vercel.app)
+
+## Approach
+
+### Backend Technologies Used
+
+- **Node.js**
+- **Express.js**
+- **MongoDB**
+- **Mongoose**
+
+### Frontend Technologies Used
+
+- **Nextjs**
+- **Typescript** 
+
+### Usage
+#### Account Creation
+- Access the registration page.
+- Provide necessary information such as username/email and password.
+- Submit the form.
+- User account will be created, and password will be securely hashed before storage.
+#### User Login
+- Access the login page.
+- Enter username/email and password.
+- Submit the form.
+- Upon successful authentication, a JWT is generated and stored as a cookie.
+- The user is redirected to the protected page.
+#### Accessing Protected Pages
+- When accessing protected pages, the JWT stored in the cookie is used for authentication.
+- If the JWT is valid, the user is granted access to the protected resource i.e., the **profile page**.
+- If the JWT is invalid or expired, the user is redirected to the login page.
+- Security Considerations
+- Password is securely hashed using **bcrypt.js**
+- **Dompurify** library is used for input validation and sanitization to prevent injection attacks and XSS vulnerabilities.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Node.js** and **npm** installed on your machine.
+- **MongoDB** installed and running locally or on a remote server.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Installation
+- Clone the repository <br>
+```git clone git@github.com:mayanktyagi1709/wanderon.git```
+- Install dependencies <br>
+```npm install```
+- Set up environment variables for database connection and JWT secret.
+- Start the server <br>
+```npm run dev```
