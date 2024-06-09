@@ -1,7 +1,30 @@
-import React from 'react'
-import { ArrowRight } from 'lucide-react'
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { ArrowRight } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function SignupPage() {
+  const router = useRouter();
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+
+  const onSignUp = async () => {
+    try {
+      const response = await axios.post("/api/users/signup", user);
+      router.push("/signin");
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      toast.error(errorMessage, { duration: 3000 });
+    }
+  };
   return (
     <section>
       <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
@@ -10,21 +33,24 @@ export default function SignupPage() {
             Sign up to create account
           </h2>
           <p className="mt-2 text-center text-base text-gray-600">
-            Already have an account?{' '}
-            <a
+            Already have an account?{" "}
+            <Link
               href="/signin"
               title=""
               className="font-medium text-black transition-all duration-200 hover:underline"
             >
               Sign In
-            </a>
+            </Link>
           </p>
           <form action="#" method="POST" className="mt-8">
             <div className="space-y-5">
               <div>
-                <label htmlFor="name" className="text-base font-medium text-gray-900">
-                  {' '}
-                  Full Name{' '}
+                <label
+                  htmlFor="name"
+                  className="text-base font-medium text-gray-900"
+                >
+                  {" "}
+                  Full Name{" "}
                 </label>
                 <div className="mt-2">
                   <input
@@ -32,13 +58,20 @@ export default function SignupPage() {
                     type="text"
                     placeholder="Full Name"
                     id="name"
+                    value={user.username}
+                    onChange={(e) =>
+                      setUser({ ...user, username: e.target.value })
+                    }
                   ></input>
                 </div>
               </div>
               <div>
-                <label htmlFor="email" className="text-base font-medium text-gray-900">
-                  {' '}
-                  Email address{' '}
+                <label
+                  htmlFor="email"
+                  className="text-base font-medium text-gray-900"
+                >
+                  {" "}
+                  Email address{" "}
                 </label>
                 <div className="mt-2">
                   <input
@@ -46,14 +79,21 @@ export default function SignupPage() {
                     type="email"
                     placeholder="Email"
                     id="email"
+                    value={user.email}
+                    onChange={(e) =>
+                      setUser({ ...user, email: e.target.value })
+                    }
                   ></input>
                 </div>
               </div>
               <div>
                 <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="text-base font-medium text-gray-900">
-                    {' '}
-                    Password{' '}
+                  <label
+                    htmlFor="password"
+                    className="text-base font-medium text-gray-900"
+                  >
+                    {" "}
+                    Password{" "}
                   </label>
                 </div>
                 <div className="mt-2">
@@ -62,11 +102,16 @@ export default function SignupPage() {
                     type="password"
                     placeholder="Password"
                     id="password"
+                    value={user.password}
+                    onChange={(e) =>
+                      setUser({ ...user, password: e.target.value })
+                    }
                   ></input>
                 </div>
               </div>
               <div>
                 <button
+                  onClick={onSignUp}
                   type="button"
                   className="inline-flex w-full items-center justify-center rounded-md bg-black px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-black/80"
                 >
@@ -78,5 +123,5 @@ export default function SignupPage() {
         </div>
       </div>
     </section>
-  )
+  );
 }
